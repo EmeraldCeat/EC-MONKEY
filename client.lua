@@ -23,7 +23,7 @@ CreateThread(function()
     end
 
     local coords = monkey.coords;
-    monkey.ped = CreatePed(4, model, coords.x, coords.y, coords.z, monkey.heading, true, true);
+    monkey.ped = CreatePed(4, model, coords.x, coords.y, coords.z, monkey.heading, false, true);
     SetEntityHeading(monkey.ped, monkey.heading);
     FreezeEntityPosition(monkey.ped, true);
     SetEntityInvincible(monkey.ped, true);

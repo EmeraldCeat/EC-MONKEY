@@ -80,6 +80,24 @@ CreateThread(function()
           },
           distance = 1.5
         });
+      elseif Target == 'ox_target' then
+        exports['ox_target']:addBoxZone({
+          coords = monkey.coords,
+          size = vec3(1, 1, 3);
+          rotation = monkey.heading,
+          debug = false,
+          options = {
+            {
+              label = 'Interact',
+              icon = 'fas fa-hand',
+              onSelect = function()
+                SetPedArmour(PlayerPedId(), 100)
+                local maxHealth = GetEntityMaxHealth(PlayerPedId());
+                SetEntityHealth(PlayerPedId(), maxHealth);
+              end
+            }
+          }
+        });
       end
     end
   else

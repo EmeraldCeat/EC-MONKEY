@@ -14,7 +14,7 @@ CreateThread(function()
     RequestModel(model)
     while not HasModelLoaded(model) do
       Wait(10);
-    end 
+    end
 
     local dict = 'mini@strip_club@idles@bouncer@base';
     RequestAnimDict(dict)
@@ -23,7 +23,7 @@ CreateThread(function()
     end
 
     local coords = monkey.coords;
-    monkey.ped = CreatePed(4, model, coords.x, coords.y, coords.z, 3374176, false, true);
+    monkey.ped = CreatePed(4, model, coords.x, coords.y, coords.z, monkey.heading, true, true);
     SetEntityHeading(monkey.ped, monkey.heading);
     FreezeEntityPosition(monkey.ped, true);
     SetEntityInvincible(monkey.ped, true);
@@ -31,7 +31,7 @@ CreateThread(function()
     TaskPlayAnim(monkey.ped, dict, 'base', 8.0, 0.0, -1, 1, 0, false, false, false);
   end
 end)
- 
+
 function Draw3DText(x, y, z, text)
     local onScreen, _x, _y = World3dToScreen2d(x, y, z)
     local p = GetGameplayCamCoords()
@@ -72,4 +72,12 @@ CreateThread(function()
         end
         Wait(3);
     end
+end)
+
+AddEventHandler('onResourceStop', function(rsc)
+  if rsc == GetCurrentResourceName() then
+    for i = 1, #Monkeys do
+      DeleteEntity(Monkeys[i].ped);
+    end
+  end
 end)

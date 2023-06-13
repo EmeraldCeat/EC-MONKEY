@@ -1,8 +1,8 @@
 local Monkeys = {
   [1] = {
-      coords = vec3(-1344.1509, -1443.3422, 3.1111),
+      coords = vec3(-1348.3923, -1446.5963, 4.4976),
       "Monkey",
-      heading = 215.6034,
+      heading = 219.2398,
       model = 'a_c_chimp'
   }
 };
@@ -23,7 +23,7 @@ CreateThread(function()
     end
 
     local coords = monkey.coords;
-    monkey.ped = CreatePed(4, model, coords.x, coords.y, coords.z, monkey.heading, false, true);
+    monkey.ped = CreatePed(4, model, coords.x, coords.y, coords.z - 1, monkey.heading, false, true);
     SetEntityHeading(monkey.ped, monkey.heading);
     FreezeEntityPosition(monkey.ped, true);
     SetEntityInvincible(monkey.ped, true);

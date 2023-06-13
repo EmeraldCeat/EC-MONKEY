@@ -1,21 +1,34 @@
-local emerald = vector3(-1344.1509, -1443.3422, 4.4111)
+local Monkeys = {
+  [1] = {
+      coords = vec3(-1344.1509, -1443.3422, 3.1111),
+      "Monkey",
+      heading = 215.6034,
+      model = 'a_c_chimp'
+  }
+};
 
-Citizen.CreateThread(function()
-  for k, v in pairs(Config.MonkeyCoords) do
-    RequestModel(GetHashKey(v[7]))
-    while not HasModelLoaded(GetHashKey(v[7])) do
-      Wait(1)
+CreateThread(function()
+  for i = 1, #Monkeys do
+    local monkey = Monkeys[i];
+    local model = monkey.model;
+    RequestModel(model)
+    while not HasModelLoaded(model) do
+      Wait(10);
     end
-    RequestAnimDict("mini@strip_club@idles@bouncer@base")
-    while not HasAnimDictLoaded("mini@strip_club@idles@bouncer@base") do
-      Wait(1)
+
+    local dict = 'mini@strip_club@idles@bouncer@base';
+    RequestAnimDict(dict)
+    while not HasAnimDictLoaded(dict) do
+      Wait(10);
     end
-    ped = CreatePed(4, v[6],v[1],v[2],v[3], 3374176, false, true)
-    SetEntityHeading(ped, v[5])
-    FreezeEntityPosition(ped, true)
-    SetEntityInvincible(ped, true)
-    SetBlockingOfNonTemporaryEvents(ped, true)
-    TaskPlayAnim(ped,"mini@strip_club@idles@bouncer@base","base", 8.0, 0.0, -1, 1, 0, 0, 0, 0)
+
+    local coords = monkey.coords;
+    monkey.ped = CreatePed(4, model, coords.x, coords.y, coords.z, 3374176, false, true);
+    SetEntityHeading(monkey.ped, monkey.heading);
+    FreezeEntityPosition(monkey.ped, true);
+    SetEntityInvincible(monkey.ped, true);
+    SetBlockingOfNonTemporaryEvents(monkey.ped, true);
+    TaskPlayAnim(monkey.ped, dict, 'base', 8.0, 0.0, -1, 1, 0, false, false, false);
   end
 end)
 
@@ -41,38 +54,22 @@ function Draw3DText(x, y, z, text)
     end
 end
 
-local kolkodalece = 2000
-
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
-        Citizen.Wait(0)
-
-          if Vdist2(GetEntityCoords(PlayerPedId(), false), emerald) < 13 then
-              Draw3DText(emerald.x,emerald.y,emerald.z, "E")
-              if IsControlJustPressed(0, 38) then
-                TriggerEvent('ec-monkey:Armor')
-                TriggerEvent('ec-monkey:Health')
+        for i = 1, #Monkeys do
+          local monkey = Monkeys[i];
+          local coords = monkey.coords;
+          local distance = #(coords - GetEntityCoords(PlayerPedId()));
+          if distance <= 10 then
+            Draw3DText(coords.x, coords.y, coords.z, '[E] To maxHealth');
+            if IsControlJustPressed(0, 38) then
+              SetPedArmour(PlayerPedId(), 100)
+              local maxHealth = GetEntityMaxHealth(PlayerPedId());
+              SetEntityHealth(PlayerPedId(), maxHealth);
             end
+          end
+          break;
         end
+        Wait(3);
     end
-end)
-
-RegisterNetEvent('ec-monkey:Armor')
-AddEventHandler('ec-monkey:Armor', function ()
-    local player = GetPlayerPed(-1)
-    local maxHealth = GetEntityMaxHealth(playerPed)
-    if GetPedArmour(player) > 49 then
-  else
-    GetPedArmour(player)
-        SetPedArmour(player, 100)
-  end
-end)
-
-RegisterNetEvent('ec-monkey:Health')
-AddEventHandler('ec-monkey:Health', function ()
-	local playerPed = PlayerPedId()
-	local maxHealth = GetEntityMaxHealth(playerPed)
-
-	local health = GetEntityHealth(playerPed)
-	SetEntityHealth(playerPed, maxHealth)
 end)

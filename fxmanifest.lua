@@ -2,10 +2,8 @@ fx_version 'cerulean'
 game 'gta5'
 lua54 'yes'
 
-shared_scripts {
-    'config.lua'
-}
+author 'EmeraldCeat'
+version '1.1.0'
 
-client_scripts {
-    'client.lua'
-}
+shared_script 'config.lua'
+client_script 'client.lua'
